@@ -1,0 +1,25 @@
+{% extends 'process/base.html' %} 
+
+{% block content %} 
+
+<!-- action="{% url 'upload_image' %}" -->
+
+<form method="post" enctype="multipart/form-data" action="{% url 'upload_image' %}">
+    {% csrf_token %}
+
+    <label for="image">Upload Image:</label>
+    <input type="file" name="image" id="image" accept="image/*" required>
+    
+    <label for="animal_type">Animal Type:</label>
+    <input type="text" name="animal_type" id="animal_type" required>
+
+    <label for="service_name">Service Name:</label>
+    <input type="text" name="service_name" id="service_name" required>
+
+    <label for="price_input">Price:</label>
+    <input type="number" name="price_input" id="price_input" required>
+
+    <button type="submit">Upload</button>
+</form>
+
+{% endblock %}

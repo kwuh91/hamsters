@@ -1,0 +1,242 @@
+{% extends 'process/base.html' %} 
+
+{% block content %} 
+
+<div class="form-container">
+    <h1 class="text-center mb-4">Modern Form</h1>
+    <form method="post" action="{% url 'process' %}" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <!-- Salon Dropdown -->
+        <div class="mb-3">
+            <label for="salon" class="form-label">Салон</label>
+            <select class="form-select" id="salon" name="salon" required>
+                <!-- Placeholder option -->
+                <option value="" disabled selected>Select a salon</option>
+
+                <!-- Populate options from database -->
+                {% for salon in salons %}
+                    <option value="{{ salon.id }}">{{ salon.address }}</option>
+                {% endfor %} 
+            </select>
+        </div>
+
+        <!-- Client Dropdown -->
+        <div class="mb-3">
+            <label for="client" class="form-label">Клиент</label>
+            <select class="form-select" id="client" name="client" required>
+                <!-- Placeholder option -->
+                <option value="" disabled selected>Select a client</option>
+
+                <!-- Populate options from database -->
+                {% for client in clients %}
+                    <option value="{{ client.id }}">{{ client.name }}, {{ client.phone_number }}, {{ client.email }}</option>
+                {% endfor %}
+                <option value="add_new" data-bs-toggle="modal" data-bs-target="#addNewClientModal">Add New Client</option>
+            </select>
+        </div>
+
+        <!-- Choose Animal Button -->
+        <div class="mb-3">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#animalModal">
+                Выбрать животное
+            </button>
+        </div>
+
+        <!-- Animal Modal -->
+        <div class="modal" id="animalModal" tabindex="-1" aria-labelledby="animalModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="animalModalLabel">Choose Animal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Animal List (You should replace this with actual data from your database) -->
+                        <div class="container mt-5">
+                            <div class="gallery-container">
+                                <div class="row row-cols-1 row-cols-md-4 g-4">
+                                    {% for myimage in images %}
+                                        <div class="col">
+                                            <a href="#" class="showmodal" data-show-modal="servicesModal" data-animal-type="{{ myimage.animal_type }}">
+                                                <img src="{{ myimage.image.url }}" class="img-fluid rounded" alt="Image">
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Modal -->
+        <div class="modal mt-5 ms-5" id="servicesModal" tabindex="-1" aria-labelledby="servicesModalLabel" 
+                aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="servicesModalLabel">Choose Services</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="servicesModalBody">
+                        <!-- Services will be dynamically populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary w-100">Submit</button>
+    </form>
+
+    <!-- Modal for Add New Client -->
+    <div class="modal fade" id="addNewClientModal" tabindex="-1" aria-labelledby="addNewClientModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNewClientModalLabel">Add New Client</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="clientForm" class="needs-validation" novalidate>
+                        <!-- Input fields for name, phone number, email -->
+                        <div class="mb-3">
+                            <label for="newClientName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="newClientName" name="newClientName" minlength="2" maxlength="255" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newClientPhone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="newClientPhone" name="newClientPhone" minlength="11" maxlength="11" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newClientEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="newClientEmail" name="newClientEmail" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        "use strict";
+
+        (function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+                })
+        })()
+
+        "use strict";
+    
+        Array.from(document.getElementsByClassName('showmodal')).forEach((e) => {
+            e.addEventListener('click', function (element) {
+                element.preventDefault();
+                if (e.hasAttribute('data-show-modal')) {
+                    const animalType = e.getAttribute('data-animal-type');
+                    showModal(e.getAttribute('data-show-modal'), animalType);
+                }
+            });
+        });
+    
+        // Show modal dialog
+        function showModal(modal, animalType) {
+            const mid = document.getElementById(modal);
+            let myModal = new bootstrap.Modal(mid);
+    
+            // Fetch services for the clicked image using AJAX
+            fetch(`/get_services/${animalType}/`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update modal content with services
+                    const modalBody = document.getElementById('servicesModalBody');
+                    modalBody.innerHTML = '';  // Clear existing content
+                    data.services.forEach(service => {
+                        const serviceItem = document.createElement('div');
+                        serviceItem.innerHTML = `<strong>${service.name}</strong>: ${service.price}$`;
+                        modalBody.appendChild(serviceItem);
+                    });
+    
+                    // Display the modal
+                    myModal.show();
+                })
+                .catch(error => console.error('Error fetching services:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add event listener to the client dropdown
+            document.getElementById('client').addEventListener('change', function () {
+                // Check if the selected option is 'Add New'
+                if (this.value === 'add_new') {
+                    // Show the modal
+                    var addNewClientModal = new bootstrap.Modal(document.getElementById('addNewClientModal'));
+                    addNewClientModal.show();
+                }
+            });
+
+            // Add event listener to the form submission
+            document.getElementById('clientForm').addEventListener('submit', function (event) {
+                // Prevent the default form submission
+                event.preventDefault();
+
+                // You can add your logic to handle the form submission (e.g., AJAX request to save the new client)
+                
+                // Collect form data
+                var formData = {
+                    'name': $('#newClientName').val(),
+                    'phone': $('#newClientPhone').val(),
+                    'email': $('#newClientEmail').val()
+                };
+                
+                // Get the CSRF token from the page's cookies
+                var csrftoken = Cookies.get('csrftoken'); 
+
+                // Send AJAX request
+                $.ajax({
+                    type: 'POST',
+                    url: '/save-client/',  // Replace with your actual URL
+                    data: formData,
+                    beforeSend: function (xhr) {
+                        // Include the CSRF token in the request headers
+                        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                    },
+                    success: function (data) {
+                        // Handle success, if needed
+                        console.log('Client saved successfully');
+                        
+                        // Clear form fields
+                        $('#newClientName').val('');
+                        $('#newClientPhone').val('');
+                        $('#newClientEmail').val('');
+
+                        // Close the modal
+                        var addNewClientModal = new bootstrap.Modal(document.getElementById('addNewClientModal'));
+                        addNewClientModal.hide();
+                    },
+                    error: function (data) {
+                        // Handle errors, if needed
+                        console.error('Error saving client');
+                    }
+                });
+
+            });
+        });
+    </script>
+
+</div>
+
+{% endblock %}
