@@ -25,3 +25,26 @@ body {
     max-height: 60vh;
     overflow-y: auto;
 }
+
+.btn-xl {
+    padding: 45px 225px;
+    font-size: 20px;
+    border-radius: 10px;
+    width:100%;   
+    white-space: nowrap; 
+}
+
+.error-message {
+    color: red;
+    font-size: 18px;
+    margin-bottom: 20px;
+    position: absolute; 
+    top: 15%; /* Adjust the value to position the error message above the container */
+}
+
+.admincontainer {
+    text-align: center; 
+    align-items: center;
+    justify-content: center;
+    position: relative; 
+}

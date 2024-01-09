@@ -3,7 +3,7 @@
 {% block content %} 
 
 <!-- action="{% url 'upload_image' %}" -->
-
+<!-- 
 <form method="post" enctype="multipart/form-data" action="{% url 'upload_image' %}">
     {% csrf_token %}
 
@@ -20,6 +20,180 @@
     <input type="number" name="price_input" id="price_input" required>
 
     <button type="submit">Upload</button>
-</form>
+</form> 
+-->
+
+<div class="admincontainer d-flex align-items-center justify-content-center vh-100">
+    {% if error_message %}
+        <div class="error-message">{{ error_message }}</div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row mb-3">
+                <div class="col">
+                    <button type="button" class="btn btn-primary btn-block btn-xl" data-bs-toggle="modal" data-bs-target="#addAnimalModal">Add animal</button>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <button type="button" class="btn btn-primary btn-block btn-xl" data-bs-toggle="modal" data-bs-target="#addServiceModal">Add service</button>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <button type="button" class="btn btn-primary btn-block btn-xl" data-bs-toggle="modal" data-bs-target="#addWorkerModal">Add worker</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row mb-3">
+                <div class="col">
+                    <a href="{% url 'adminpage' %}" class="btn btn-success btn-block btn-xl">History</a>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <a href="{% url 'adminpage' %}" class="btn btn-success btn-block btn-xl">Cancel</a>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <a href="{% url 'authorization' %}" class="btn btn-success btn-block btn-xl">...</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Animal Modal -->
+<div class="modal fade" id="addAnimalModal" tabindex="-1" aria-labelledby="addAnimalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAnimalModalLabel">Add Animal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" enctype="multipart/form-data" action="{% url 'upload_image' %}" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Upload Image:</label>
+                        <input type="file" name="image" class="form-control" id="image" placeholder="Upload image" accept="image/*" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="animal_type" class="form-label">Animal Type:</label>
+                        <input type="text" class="form-control" name="animal_type" id="animal_type" placeholder="What animal" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Service Modal -->
+<div class="modal fade" id="addServiceModal" tabindex="-1" aria-labelledby="addServiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addServiceModalLabel">Add Service</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" action="{% url 'add_service' %}" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="dropdown" class="form-label">Select an animal:</label>
+                        <select class="form-select" id="animaldropdown" name="animaldropdown">
+                            <!-- Placeholder option -->
+                            <option value="" disabled selected>Select an animal</option>
+
+                            <!-- Populate options from database -->
+                            {% for animal in animals %}
+                                <option value="{{ animal.animal_type }}">{{ animal.animal_type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="service_name" class="form-label">Service Name:</label>
+                        <input type="text" class="form-control" name="service_name" id="service_name" placeholder="Enter service name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price_input" class="form-label">Price:</label>
+                        <input type="number" class="form-control" name="price_input" id="price_input" placeholder="Enter service price" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Worker Modal -->
+<div class="modal fade" id="addWorkerModal" tabindex="-1" aria-labelledby="addWorkerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addWorkerModalLabel">Add Worker</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" action="{% url 'add_worker' %}" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="staff_login" class="form-label">Login:</label>
+                        <input type="text" class="form-control" name="staff_login" id="staff_login" placeholder="Enter staff login" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="staff_password" class="form-label">Password:</label>
+                        <input type="password" class="form-control" name="staff_password" id="staff_password" placeholder="Enter staff password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    "use strict";
+
+    (function () {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+            })
+    })()
+</script>
 
 {% endblock %}

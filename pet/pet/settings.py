@@ -114,6 +114,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'process.authentication_backends.WorkerAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Include the default backend
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -141,3 +145,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'process/static/process')
 MEDIA_URL = 'process/static/process/'
+
+LOGIN_URL = 'process'
