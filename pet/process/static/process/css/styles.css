@@ -48,3 +48,17 @@ body {
     justify-content: center;
     position: relative; 
 }
+
+.service-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-container {
+    text-align: right;
+}
+
+/* Adjust button styles if needed */
+.button-container button {
+    margin-left: 5px;  /* Add margin between buttons if needed */
+}

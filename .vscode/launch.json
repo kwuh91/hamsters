@@ -15,6 +15,14 @@
             ],
             "django": true,
             "justMyCode": true
+        }, 
+        {
+            "name": "Launch localhost",
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": true,
+            "url": "http://127.0.0.1:8000/",
+            "webRoot": "${workspaceFolder}\\pet\\manage.py"
         }
     ]
 }

@@ -12,4 +12,6 @@ urlpatterns = [
     path('get_services/<str:animal_type>/', views.get_services_for_image, name='get_services_for_image'),
     path('save-client/', views.save_client, name='save_client'),
     path('adminpage/', views.dummy_view, name='adminpage'),
+    path('update_cart/', views.update_cart, name='update_cart'),
+    path('show_final_price/', views.show_final_price, name='show_final_price'),
 ]

@@ -67,5 +67,31 @@ class Worker(AbstractBaseUser, PermissionsMixin):
         help_text='Specific permissions for this user.',
     )
 
+    # def __str__(self):
+    #     return self.login
+
+
+# class User(models.Model):
+#     worker = models.OneToOneField(Worker, on_delete=models.CASCADE)
+
+
+class Cart(models.Model):
+    price = models.IntegerField()
+    quantity = models.IntegerField()
+
+
+class OrdersHistory(models.Model):
+    staff_login = models.CharField(max_length=255)
+
+    client_name = models.CharField(max_length=255)
+    client_email = models.EmailField()
+    client_phone_number = models.CharField(max_length=11)  # Adjust max_length as needed
+
+    salon_address = models.CharField(max_length=255)
+
+    price = models.IntegerField()
+
+    timestamp = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
-        return self.login
+        return self.input_text

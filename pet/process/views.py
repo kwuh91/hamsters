@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseNotFound
 from typing import Any
-from .models import Image, Service, Salon, Client, Worker
+from .models import Image, Service, Salon, Client, Worker, Cart, OrdersHistory
 from django.utils import timezone
 from django.http import JsonResponse
 from typing import Any
@@ -23,9 +23,9 @@ def process(request):
     # get login and password 
     if request.method == 'POST':
         # Redirect to the next page after successful login
-        next_url = request.POST.get('next', None)
-        if next_url:
-            return redirect(next_url)
+        # next_url = request.POST.get('next', None)
+        # if next_url:
+        #     return redirect(next_url)
 
         # Get the values from the form
         username = request.POST.get('username')
@@ -35,18 +35,8 @@ def process(request):
 
         print(f"Login: {username}, Password: {password}")
 
-    # get new client data
-    else:
-        client_name = request.GET.get("newClientName")
-        client_phone = request.GET.get("newClientPhone")
-        client_email = request.GET.get("newClientEmail")
-
-        print(f"Name: {client_name}, Phone: {client_phone}, Email: {client_email}")
-
-        Client.objects.create(name=client_name, phone_number=client_phone, email=client_email)
-        
-    # return render to admin/worker page
-    if user is not None and user.is_active:
+        # return render to admin/worker page
+        if user is not None:
             login(request, user)
 
             if user.is_superuser:
@@ -139,7 +129,7 @@ def add_worker(request):
 
 # fetch services for a specific image
 def get_services_for_image(request, animal_type):
-    services = Service.objects.filter(animal_type=animal_type).values('name', 'price')
+    services = Service.objects.filter(animal_type=animal_type).values('name', 'price', 'id', 'animal_type')
     return JsonResponse({'services': list(services)})
 
 
@@ -167,3 +157,64 @@ def save_client(request):
 def dummy_view(request):
     images = Image.objects.all()
     return render(request, 'process/adminpage.html', {'error_message': 'dummy view.'})
+
+
+def update_cart(request):
+    if request.method == 'POST':
+        print(request.POST)
+        # print("Update")
+        animal_type = request.POST.get('animal_type')
+        services_with_current_animal_type = Service.objects.filter(animal_type=animal_type)
+        list_of_ids = services_with_current_animal_type.values_list('id', flat=True)
+
+        # Extracting data from the hidden input fields
+        for id in list_of_ids:
+            service_count = request.POST.get(f'service_count{id}')
+            
+            if service_count is not None:
+                service_price = Service.objects.get(id=id).price
+                Cart.objects.create(price=service_price, quantity=int(service_count))
+            
+        # Return a JSON response indicating success
+        return JsonResponse({'message': 'Cart updated successfully'})
+
+    # Return a JSON response indicating failure (in case of GET request)
+    return JsonResponse({'error': 'Invalid request method'})
+
+
+def show_final_price(request):
+    if request.method == 'POST':
+        print(request.POST)
+        cart = Cart.objects.all()
+        final_price: int = 0
+        for item in cart:
+            final_price += item.price * item.quantity
+        
+        staff_login = request.user.username
+        
+        cliet_id = request.POST.get('client')
+        client_name = Client.objects.get(id=cliet_id).name
+        client_phone = Client.objects.get(id=cliet_id).phone_number
+        client_email = Client.objects.get(id=cliet_id).email
+
+        salon_id = request.POST.get('salon')
+        salon_address = Salon.objects.get(id=salon_id).address
+
+        try:
+            OrdersHistory.objects.create(staff_login=staff_login, 
+                                        client_name=client_name, 
+                                        client_phone_number=client_phone, 
+                                        client_email=client_email, 
+                                        salon_address=salon_address, 
+                                        price=final_price, 
+                                        timestamp=timezone.now())
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+        finally:
+            Cart.objects.all().delete()
+
+            # Return a JSON response indicating success or not
+            return JsonResponse({'final_price': f"An unexpected error occurred: {e}"})
+       
+    # Return a JSON response indicating failure (in case of GET request)
+    return JsonResponse({'error': 'Fail'})
