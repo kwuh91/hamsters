@@ -184,7 +184,7 @@ def update_cart(request):
 
 def show_final_price(request):
     if request.method == 'POST':
-        print(request.POST)
+        # print(request.POST)
         cart = Cart.objects.all()
         final_price: int = 0
         for item in cart:
@@ -192,8 +192,8 @@ def show_final_price(request):
         
         staff_login = request.user.username
         
-        cliet_id = request.POST.get('client')
-        client_name = Client.objects.get(id=cliet_id).name
+        cliet_id     = request.POST.get('client')
+        client_name  = Client.objects.get(id=cliet_id).name
         client_phone = Client.objects.get(id=cliet_id).phone_number
         client_email = Client.objects.get(id=cliet_id).email
 

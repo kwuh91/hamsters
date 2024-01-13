@@ -5,5 +5,5 @@ class ProcessConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'process'
 
-    def ready(self):
-        import process.signals  # Import the signals module
+    # def ready(self):
+    #     import process.signals  # Import the signals module
