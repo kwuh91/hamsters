@@ -1,0 +1,188 @@
+{% extends 'process/base.html' %} 
+
+{% block content %} 
+
+<!-- Back button -->
+<form method="POST" action="{% url 'process' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary position-fixed top-0 p-3 m-3">Вернуться Назад</button>
+</form>
+
+<div class="container">
+    <h1>
+        {% if wage_filter %}
+            Зарплата за выбранный период: {{ wage }}
+        {% else %}
+            Зарплата: {{ wage }}
+        {% endif %}
+    </h1>
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Display your items in a table -->
+            <div style="max-height: 600px; overflow-y: auto;">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Логин Грумера</th>
+                            <th>Имя Клиента</th>
+                            <th>Почта Клиента</th>
+                            <th>Номер Телефона Клиента</th>
+                            <th>Адрес Салона</th>
+                            <th>Цена</th>
+                            <th>Дата</th>
+                            <!-- Add other headings up to Heading 7 -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in history %}
+                            <tr>
+                                <td>{{ item.staff_login }}</td>
+                                <td>{{ item.client_name }}</td>
+                                <td>{{ item.client_email }}</td>
+                                <td>{{ item.client_phone_number }}</td>
+                                <td>{{ item.salon_address }}</td>
+                                <td>{{ item.price }}</td>
+                                <td>{{ item.timestamp }}</td>
+                                <!-- Add other fields up to field7 -->
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-4" position-fixed>
+            <h1>Добавить фильтр</h1>
+
+            <form method="post" action="{% url 'filter_history' %}">
+                {% csrf_token %}
+                
+                <!-- Sort Options -->
+                <div class="mb-3">
+                    <label class="form-label">Отсортировать:</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sort_option" id="asc" value="asc">
+                        <label class="form-check-label" for="asc">По Возрастанию</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sort_option" id="desc" value="desc">
+                        <label class="form-check-label" for="desc">По Убыванию</label>
+                    </div>
+                </div>
+        
+                <!-- Sort by -->
+                <div class="mb-3">
+                    <label class="form-label">Отсортировать По:</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sort_by" id="price" value="price">
+                        <label class="form-check-label" for="price">Цене</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sort_by" id="timestamp" value="timestamp">
+                        <label class="form-check-label" for="timestamp">Дате</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sort_by" id="client_name" value="client_name">
+                        <label class="form-check-label" for="client_name">Имени Клиента</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sort_by" id="client_phone_number" value="client_phone_number">
+                        <label class="form-check-label" for="client_phone_number">Номеру Телефона Клиента</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sort_by" id="client_email" value="client_email">
+                        <label class="form-check-label" for="client_email">Почте Клиента</label>
+                    </div>
+                </div>
+
+                <!-- Filter by -->
+                <div class="mb-3">
+                    <label class="form-label">Отфильтровать По:</label>
+
+                    <br>
+
+                    <label for="client" class="form-label">Клиенту</label>
+                    <select class="form-select custom-font" id="client" name="client">
+                        <!-- Placeholder option -->
+                        <option value=0 selected>Выберите Клиента</option>
+        
+                        <!-- Populate options from database -->
+                        {% for client in clients %}
+                            <option value="{{ client.id }}" class="custom-font">
+                                {{ client.name }}, {{ client.phone_number }}, {{ client.email }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                    <br>
+
+                    <label for="salon" class="form-label">Салону</label>
+                    <select class="form-select custom-font" id="salon" name="salon">
+                        <!-- Placeholder option -->
+                        <option value=0 selected>Выберите Салон</option>
+        
+                        <!-- Populate options from database -->
+                        {% for salon in salons %}
+                            <option value="{{ salon.id }}" class="custom-font">
+                                {{ salon.address }}
+                            </option>
+                        {% endfor %} 
+                    </select>
+
+                    {% if admin %}
+                    <br>
+
+                    <label for="worker" class="form-label">Грумеру</label>
+                    <select class="form-select custom-font" id="worker" name="worker">
+                        <!-- Placeholder option -->
+                        <option value=0 selected>Выберите Грумера</option>
+        
+                        <!-- Populate options from database -->
+                        {% for worker in workers %}
+                            <option value="{{ worker.id }}" class="custom-font">
+                                {{ worker.login }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    {% endif %}
+                </div>
+
+                <!-- Period -->
+                <div class="mb-3 form-check">
+                    <input class="form-check-input" type="checkbox" id="show_period" name="show_period">
+                    <label class="form-check-label" for="show_period">Выбрать период</label>
+                </div>
+
+                <!-- Period Fields -->
+                <div class="mb-3" id="period_fields" style="display: none;">
+                    <label class="form-label">С Какой Даты:</label>
+                    <input type="date" class="form-control" name="start_date" id="start_date" disabled>
+
+                    <label class="form-label mt-2">По Какую Дату:</label>
+                    <input type="date" class="form-control" name="end_date" id="end_date" disabled>
+                </div>
+        
+                <!-- Submit and Reset Buttons -->
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button id="resetButton" type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('show_period').addEventListener('change', function () {
+        var periodFields = document.getElementById('period_fields');
+        periodFields.style.display = this.checked ? 'block' : 'none';
+        document.getElementById('start_date').disabled = !this.checked;
+        document.getElementById('end_date').disabled = !this.checked;
+    });
+
+    document.getElementById('resetButton').addEventListener('click', function() {
+           document.forms[1].reset(); 
+           document.forms[1].submit();
+    });
+</script>
+
+{% endblock %}

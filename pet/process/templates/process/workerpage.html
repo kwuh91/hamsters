@@ -1,6 +1,18 @@
 {% extends 'process/base.html' %} 
 
+{% load static %} 
+
 {% block content %} 
+
+<!-- Back button -->
+<a href="{% url 'authorization' %}">
+    <img src="{% static 'process/images/Empty.png' %}" class="position-fixed top-0 p-3" style="width: 100px;">
+</a>
+
+<!-- History button -->
+<a href="{% url 'worker_history' %}" id="history-icon">
+    <button type="submit" class="btn btn-primary position-fixed end-0 top-0 p-3 m-3">История</button>
+</a>
 
 <div class="form-container">
     <h1 class="text-center mb-4">Modern Form</h1>
@@ -9,13 +21,15 @@
         <!-- Salon Dropdown -->
         <div class="mb-3">
             <label for="salon" class="form-label">Салон</label>
-            <select class="form-select" id="salon" name="salon" required>
+            <select class="form-select custom-font" id="salon" name="salon" required>
                 <!-- Placeholder option -->
                 <option value="" disabled selected>Select a salon</option>
 
                 <!-- Populate options from database -->
                 {% for salon in salons %}
-                    <option value="{{ salon.id }}">{{ salon.address }}</option>
+                    <option value="{{ salon.id }}" class="custom-font">
+                        {{ salon.address }}
+                    </option>
                 {% endfor %} 
             </select>
         </div>
@@ -23,13 +37,15 @@
         <!-- Client Dropdown -->
         <div class="mb-3">
             <label for="client" class="form-label">Клиент</label>
-            <select class="form-select" id="client" name="client" required>
+            <select class="form-select custom-font" id="client" name="client" required>
                 <!-- Placeholder option -->
                 <option value="" disabled selected>Select a client</option>
 
                 <!-- Populate options from database -->
                 {% for client in clients %}
-                    <option value="{{ client.id }}">{{ client.name }}, {{ client.phone_number }}, {{ client.email }}</option>
+                    <option value="{{ client.id }}" class="custom-font">
+                        {{ client.name }}, {{ client.phone_number }}, {{ client.email }}
+                    </option>
                 {% endfor %}
                 <option value="add_new" data-bs-toggle="modal" data-bs-target="#addNewClientModal">Add New Client</option>
             </select>
@@ -88,7 +104,7 @@
 
                         <!-- Services will be dynamically populated here -->
                         <div id="servicesModalBody"></div>
-
+                        
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
@@ -145,6 +161,18 @@
     </div>
 
     <script>
+        // Initialize Select2 on your dropdown
+        $(document).ready(function() {
+            $('#client').select2({
+                theme: 'bootstrap-5',
+                containerCssClass: 'form-select custom-font' // Manually add form-select and custom-font classes
+            });
+            $('#salon').select2({
+                theme: 'bootstrap-5',
+                containerCssClass: 'form-select custom-font' // Manually add form-select and custom-font classes
+            });
+        });
+
         "use strict";
 
         (function () {

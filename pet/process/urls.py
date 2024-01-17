@@ -14,4 +14,7 @@ urlpatterns = [
     path('adminpage/', views.dummy_view, name='adminpage'),
     path('update_cart/', views.update_cart, name='update_cart'),
     path('show_final_price/', views.show_final_price, name='show_final_price'),
+    path('worker_history/', views.worker_history, name='worker_history'),
+    path('filter_history/', views.filter_history, name='filter_history'),
+    # path('redirect_to_mainpage/', views.redirect_to_mainpage, name='redirect_to_mainpage')
 ]

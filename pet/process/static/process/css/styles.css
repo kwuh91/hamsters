@@ -5,6 +5,16 @@ body {
     height: 100vh;
     margin: 0;
     background-color: #f8f9fa;
+    font-family: 'Play';
+}
+
+.custom-font {
+    font-family: 'Play' !important;
+}
+
+.custom-font .select2-selection--single {
+    font-family: 'Play';
+    /* Add other font properties as needed */
 }
 
 .login-container {
@@ -61,4 +71,9 @@ body {
 /* Adjust button styles if needed */
 .button-container button {
     margin-left: 5px;  /* Add margin between buttons if needed */
+}
+
+.custom-form {
+    text-align: left !important;
+    margin-left: 0 !important; /* Remove default margin */
 }
