@@ -77,3 +77,8 @@ body {
     text-align: left !important;
     margin-left: 0 !important; /* Remove default margin */
 }
+
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+}

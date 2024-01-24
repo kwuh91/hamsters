@@ -47,16 +47,19 @@ def process(request):
             if not is_redirect:
                 login(request, user)
 
+            clients = Client.objects.all()
+            images  = Image.objects.all()
+
             if user.is_superuser:
                 # adminpage
-                images = Image.objects.all()
-                return render(request, 'process/adminpage.html', {'animals': images})
+                workers = Worker.objects.all()
+                return render(request, 'process/adminpage.html', {'animals' : images, 
+                                                                  'clients' : clients,
+                                                                  'workers' : workers})
             
             elif user.is_staff:
                 # workerpage
-                images  = Image.objects.all()
                 salons  = Salon.objects.all()
-                clients = Client.objects.all()
                 return render(request, 'process/workerpage.html', {'images' : images, 
                                                                    'salons' : salons, 
                                                                    'clients': clients})
@@ -151,6 +154,23 @@ def add_worker(request):
                                                       'animals'      : images})
 
 
+# fetch orders
+def get_orders(request):
+    login  = request.POST.get('login')
+    client_id = request.POST.get('client')
+    client_name  = Client.objects.get(id=client_id).name
+    client_phone = Client.objects.get(id=client_id).phone_number
+    client_email = Client.objects.get(id=client_id).email
+
+    orders = OrdersHistory.objects.filter(staff_login=login, 
+                                    client_name=client_name, 
+                                    client_email=client_email, 
+                                    client_phone_number=client_phone).values('price', 
+                                                                             'timestamp',
+                                                                             'id')
+    return JsonResponse({'orders': list(orders)})
+
+
 # fetch services for a specific image
 def get_services_for_image(request, animal_type):
     services = Service.objects.filter(animal_type=animal_type).values('name', 
@@ -183,11 +203,6 @@ def save_client(request):
     return JsonResponse({'error': 'Invalid request method'})
 
 
-def dummy_view(request):
-    images = Image.objects.all()
-    return render(request, 'process/adminpage.html', {'error_message': 'dummy view.'})
-
-
 def update_cart(request):
     if request.method == 'POST':
         print(request.POST)
@@ -214,7 +229,11 @@ def update_cart(request):
 
 def show_final_price(request):
     if request.method == 'POST':
-        # print(request.POST)
+
+        print("----------------------------------------------------------------------------------------------------------------------------------------------------")
+
+        print(request.POST)
+
         cart = Cart.objects.all()
         final_price: int = 0
         for item in cart:
@@ -230,6 +249,7 @@ def show_final_price(request):
         salon_id = request.POST.get('salon')
         salon_address = Salon.objects.get(id=salon_id).address
 
+        print(f"final price = {final_price}")
 
         OrdersHistory.objects.create(staff_login=staff_login, 
                                     client_name=client_name, 
@@ -353,7 +373,9 @@ def filter_history(request):
                                                                'workers'     : workers})
 
 
-# def redirect_to_mainpage(request):
-#     # Redirect to the previous page
-#     return redirect(process)
-    
+def delete_order(request):
+    if request.method == 'POST':
+        for item in request.POST:
+            OrdersHistory.objects.filter(id=request.POST[item]).delete()
+
+    return JsonResponse({'message': 'Cart updated successfully'})

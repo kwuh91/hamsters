@@ -7,3 +7,4 @@ class ProcessConfig(AppConfig):
 
     # def ready(self):
     #     import process.signals  # Import the signals module
+    

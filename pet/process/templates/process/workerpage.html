@@ -15,7 +15,7 @@
 </a>
 
 <div class="form-container">
-    <h1 class="text-center mb-4">Modern Form</h1>
+    <h1 class="text-center mb-4">Groomic</h1>
     <form id="show_final_price" class="needs-validation" novalidate>
         {% csrf_token %}
         <!-- Salon Dropdown -->
@@ -23,7 +23,7 @@
             <label for="salon" class="form-label">Салон</label>
             <select class="form-select custom-font" id="salon" name="salon" required>
                 <!-- Placeholder option -->
-                <option value="" disabled selected>Select a salon</option>
+                <option value="" disabled selected>Выберите салон</option>
 
                 <!-- Populate options from database -->
                 {% for salon in salons %}
@@ -39,7 +39,7 @@
             <label for="client" class="form-label">Клиент</label>
             <select class="form-select custom-font" id="client" name="client" required>
                 <!-- Placeholder option -->
-                <option value="" disabled selected>Select a client</option>
+                <option value="" disabled selected>Выберите клиента</option>
 
                 <!-- Populate options from database -->
                 {% for client in clients %}
@@ -47,7 +47,7 @@
                         {{ client.name }}, {{ client.phone_number }}, {{ client.email }}
                     </option>
                 {% endfor %}
-                <option value="add_new" data-bs-toggle="modal" data-bs-target="#addNewClientModal">Add New Client</option>
+                <option value="add_new" data-bs-toggle="modal" data-bs-target="#addNewClientModal">Добавить нового клиента</option>
             </select>
         </div>
 
@@ -63,7 +63,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="animalModalLabel">Choose Animal</h5>
+                        <h5 class="modal-title" id="animalModalLabel">Выбор животного</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -87,7 +87,7 @@
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#showPriceModal">Submit</button>
+        <button type="submit" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#showPriceModal">Оформить</button>
     </form>
 
     <!-- Services Modal -->
@@ -96,7 +96,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="servicesModalLabel">Choose Services</h5>
+                    <h5 class="modal-title" id="servicesModalLabel">Выбор услуг</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -105,7 +105,7 @@
                         <!-- Services will be dynamically populated here -->
                         <div id="servicesModalBody"></div>
                         
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Добавить</button>
                     </form>
                 </div>
             </div>
@@ -117,25 +117,25 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addNewClientModalLabel">Add New Client</h5>
+                    <h5 class="modal-title" id="addNewClientModalLabel">Добавить нового Клиента</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="clientForm" class="needs-validation" novalidate>
                         <!-- Input fields for name, phone number, email -->
                         <div class="mb-3">
-                            <label for="newClientName" class="form-label">Name</label>
+                            <label for="newClientName" class="form-label">Имя</label>
                             <input type="text" class="form-control" id="newClientName" name="newClientName" minlength="2" maxlength="255" required>
                         </div>
                         <div class="mb-3">
-                            <label for="newClientPhone" class="form-label">Phone Number</label>
+                            <label for="newClientPhone" class="form-label">Номер телефона</label>
                             <input type="tel" class="form-control" id="newClientPhone" name="newClientPhone" minlength="11" maxlength="11" required>
                         </div>
                         <div class="mb-3">
                             <label for="newClientEmail" class="form-label">Email</label>
                             <input type="email" class="form-control" id="newClientEmail" name="newClientEmail" required>
                         </div>
-                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Сохранить</button>
                     </form>
                 </div>
             </div>
@@ -147,7 +147,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="showPriceModal">Fetched Data</h5>
+                    <h5 class="modal-title" id="showPriceModal">Итоговая стоимость</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="FinalPriceBody">
@@ -398,7 +398,7 @@
                 
                 // Collect form data
                 var formData = {
-                    'salon': document.getElementById('salon').value,
+                    'salon' : document.getElementById('salon').value,
                     'client': document.getElementById('client').value
                 };
                 
@@ -424,7 +424,7 @@
                         // priceItem.classList.add("row", "mb-3");
                         priceItem.innerHTML = 
                         `
-                        <strong>price</strong>: ${data.final_price}$
+                        <strong>цена</strong>: ${data.final_price}₽
                         `;
                         modalBody.appendChild(priceItem);
                         // Close the modal

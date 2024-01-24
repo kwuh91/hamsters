@@ -2,27 +2,6 @@
 
 {% block content %} 
 
-<!-- action="{% url 'upload_image' %}" -->
-<!-- 
-<form method="post" enctype="multipart/form-data" action="{% url 'upload_image' %}">
-    {% csrf_token %}
-
-    <label for="image">Upload Image:</label>
-    <input type="file" name="image" id="image" accept="image/*" required>
-    
-    <label for="animal_type">Animal Type:</label>
-    <input type="text" name="animal_type" id="animal_type" required>
-
-    <label for="service_name">Service Name:</label>
-    <input type="text" name="service_name" id="service_name" required>
-
-    <label for="price_input">Price:</label>
-    <input type="number" name="price_input" id="price_input" required>
-
-    <button type="submit">Upload</button>
-</form> 
--->
-
 <div class="admincontainer d-flex align-items-center justify-content-center vh-100">
     {% if error_message %}
         <div class="error-message">{{ error_message }}</div>
@@ -32,29 +11,29 @@
         <div class="col-md-6">
             <div class="row mb-3">
                 <div class="col">
-                    <button type="button" class="btn btn-primary btn-block btn-xl" data-bs-toggle="modal" data-bs-target="#addAnimalModal">Add animal</button>
+                    <button type="button" class="btn btn-primary btn-block btn-xl" data-bs-toggle="modal" data-bs-target="#addAnimalModal">Добавить животное</button>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col">
-                    <button type="button" class="btn btn-primary btn-block btn-xl" data-bs-toggle="modal" data-bs-target="#addServiceModal">Add service</button>
+                    <button type="button" class="btn btn-primary btn-block btn-xl" data-bs-toggle="modal" data-bs-target="#addServiceModal">Добавить услугу</button>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col">
-                    <button type="button" class="btn btn-primary btn-block btn-xl" data-bs-toggle="modal" data-bs-target="#addWorkerModal">Add worker</button>
+                    <button type="button" class="btn btn-primary btn-block btn-xl" data-bs-toggle="modal" data-bs-target="#addWorkerModal">Добавить грумера</button>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="row mb-3">
                 <div class="col">
-                    <a href="{% url 'worker_history' %}" class="btn btn-success btn-block btn-xl">History</a>
+                    <button type="button" class="btn btn-success btn-block btn-xl" data-bs-toggle="modal" data-bs-target="#cancelModal">Отменить заказ</button>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col">
-                    <a href="{% url 'adminpage' %}" class="btn btn-success btn-block btn-xl">Cancel</a>
+                    <a href="{% url 'worker_history' %}" class="btn btn-success btn-block btn-xl">History</a>
                 </div>
             </div>
             <div class="row mb-3">
@@ -71,7 +50,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addAnimalModalLabel">Add Animal</h5>
+                <h5 class="modal-title" id="addAnimalModalLabel">Добавить животное</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -80,12 +59,12 @@
                     {% csrf_token %}
 
                     <div class="mb-3">
-                        <label for="image" class="form-label">Upload Image:</label>
+                        <label for="image" class="form-label">Загрузить изображение:</label>
                         <input type="file" name="image" class="form-control" id="image" placeholder="Upload image" accept="image/*" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="animal_type" class="form-label">Animal Type:</label>
+                        <label for="animal_type" class="form-label">Вид животного:</label>
                         <input type="text" class="form-control" name="animal_type" id="animal_type" placeholder="What animal" required>
                     </div>
 
@@ -112,10 +91,10 @@
                     {% csrf_token %}
 
                     <div class="mb-3">
-                        <label for="dropdown" class="form-label">Select an animal:</label>
+                        <label for="dropdown" class="form-label">Выберите животное:</label>
                         <select class="form-select" id="animaldropdown" name="animaldropdown">
                             <!-- Placeholder option -->
-                            <option value="" disabled selected>Select an animal</option>
+                            <option value="" disabled selected>Выберите животное</option>
 
                             <!-- Populate options from database -->
                             {% for animal in animals %}
@@ -125,11 +104,11 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="service_name" class="form-label">Service Name:</label>
+                        <label for="service_name" class="form-label">Название сервиса:</label>
                         <input type="text" class="form-control" name="service_name" id="service_name" placeholder="Enter service name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="price_input" class="form-label">Price:</label>
+                        <label for="price_input" class="form-label">Цена:</label>
                         <input type="number" class="form-control" name="price_input" id="price_input" placeholder="Enter service price" required>
                     </div>
 
@@ -147,7 +126,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addWorkerModalLabel">Add Worker</h5>
+                <h5 class="modal-title" id="addWorkerModalLabel">Добавить грумера</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -156,12 +135,12 @@
                     {% csrf_token %}
 
                     <div class="mb-3">
-                        <label for="staff_login" class="form-label">Login:</label>
+                        <label for="staff_login" class="form-label">Логин:</label>
                         <input type="text" class="form-control" name="staff_login" id="staff_login" placeholder="Enter staff login" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="staff_password" class="form-label">Password:</label>
+                        <label for="staff_password" class="form-label">Пароль:</label>
                         <input type="password" class="form-control" name="staff_password" id="staff_password" placeholder="Enter staff password" required>
                     </div>
 
@@ -173,6 +152,95 @@
         </div>
     </div>
 </div>
+
+<!-- Cancel Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModal">Отменить заказ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form id="cancelform" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="logindropdown" class="form-label">Логин</label>
+                        <select class="form-select" id="logindropdown" name="logindropdown">
+                            <!-- Placeholder option -->
+                            <option value="" disabled selected>Выберите логин грумера</option>
+
+                            <!-- Populate options from database -->
+                            {% for worker in workers %}
+                                <option value="{{ worker.login }}">{{ worker.login }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="clientdropdown" class="form-label">Клиент</label>
+                        <select class="form-select custom-font" id="clientdropdown" name="clientdropdown" required>
+                            <!-- Placeholder option -->
+                            <option value="" disabled selected>Выберите клиента</option>
+            
+                            <!-- Populate options from database -->
+                            {% for client in clients %}
+                                <option value="{{ client.id }}" class="custom-font">
+                                    {{ client.name }}, {{ client.phone_number }}, {{ client.email }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn btn-primary showmodal" data-show-modal="ordersModal">Поиск</button>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Orders Modal -->
+<div class="modal mt-5 ms-5" id="ordersModal" tabindex="-1" aria-labelledby="ordersModalLabel" 
+        aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ordersModalLabel">Выберите заказы</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="execute_order_removal" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Display your items in a table  -->
+                    <div style="max-height: 600px; overflow-y: auto;">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Стоимость заказа</th>
+                                    <th>Дата и время оформления</th>
+                                    <th>Выбрать</th>
+                                </tr>
+                            </thead>
+                                <tbody id="ordersModalBody">
+
+                                    <!-- dynamically populated -->
+
+                                </tbody>
+                        </table>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Удалить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     "use strict";
@@ -194,6 +262,119 @@
             }, false)
             })
     })()
+
+    Array.from(document.getElementsByClassName('showmodal')).forEach((e) => {
+        e.addEventListener('click', function (element) {
+            element.preventDefault();
+            if (e.hasAttribute('data-show-modal')) {
+                showModal(e.getAttribute('data-show-modal'));
+            }
+        });
+    });
+
+    // Show modal dialog
+    function showModal(modal) {
+        const mid = document.getElementById(modal);
+        let myModal = new bootstrap.Modal(mid);
+        
+        // Collect form data
+        var formData = {
+            'login' : document.getElementById('logindropdown').value,
+            'client': document.getElementById('clientdropdown').value
+        };
+        
+        // Get the CSRF token from the page's cookies
+        var csrftoken = Cookies.get('csrftoken'); 
+
+        // Send AJAX request
+        $.ajax({
+            type: 'POST',
+            url: '/get_orders/',  // Replace with your actual URL
+            data: formData,
+            beforeSend: function (xhr) {
+                // Include the CSRF token in the request headers
+                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+            },
+            success: function (data) {
+                // Update modal content with orders
+                const modalBody = document.getElementById('ordersModalBody');
+                modalBody.innerHTML = '';  // Clear existing content
+                
+                console.log(data)
+
+                data.orders.forEach(order => {
+                    console.log(order)
+                    const orderItem = document.createElement('tr');
+                    // orderItem.classList.add("mb-3");
+                    orderItem.innerHTML = 
+                    `
+                        <td>${order.price}</td>
+                        <td>${order.timestamp}</td>
+                        <td>
+                            <input type="checkbox" class="form-check-input" id="check${order.id}" name="check${order.id}" value="${order.id}">
+                        </td>
+                    `;
+
+                    modalBody.appendChild(orderItem);
+                });
+
+                // Display the modal
+                myModal.show();
+            },
+            error: function (data) {
+                // Handle errors, if needed
+                console.log(data);
+                console.error('Error showing orders');
+            }
+        });
+    }
+
+    // Add event listener to the form submission
+    document.getElementById('execute_order_removal').addEventListener('submit', function (event) {
+        // Prevent the default form submission
+        event.preventDefault();
+
+        var formData = {};
+
+        // Select all checkboxes using querySelectorAll
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+        let count = 1;
+        checkboxes.forEach(checkbox => {
+            // Check if the checkbox is checked
+            if (checkbox.checked) {
+                // Extract the value attribute and add it to the array
+                formData[`checkbox${count}`] = checkbox.value;
+                count += 1;
+            }
+        });
+        console.log('formdata', formData)
+        // Get the CSRF token from the page's cookies
+        var csrftoken = Cookies.get('csrftoken'); 
+
+        // Send AJAX request
+        $.ajax({
+            type: 'POST',
+            url: '/delete_order/',  // Replace with your actual URL
+            data: {formData:formData},
+            beforeSend: function (xhr) {
+                // Include the CSRF token in the request headers
+                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+            },
+            success: function (data) {
+                console.log("Success removing order(s)");
+                // window.location.reload();
+                // console.log(data);
+            },
+            error: function (data) {
+                // Handle errors, if needed
+                console.log(data);
+                console.error('Error removing order(s)');
+            }
+        });
+
+    });
+
 </script>
 
 {% endblock %}

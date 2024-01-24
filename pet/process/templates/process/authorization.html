@@ -3,20 +3,20 @@
 {% block content %} 
 
 <div class="login-container">
-    <h1 class="text-center mb-4">Modern Login</h1>
+    <h1 class="text-center mb-4">Groomic</h1>
     <form method="post" action="{% url 'process' %}" class="needs-validation" novalidate>
         {% csrf_token %}
         <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
+            <label for="username" class="form-label">Имя пользователя</label>
             <input type="text" name="username" id="username" class="form-control" minlength="4" maxlength="10" required>
-            <div class="invalid-feedback">Please enter your username.</div>
+            <div class="invalid-feedback">Введите имя пользователя.</div>
         </div>
         <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="form-label">Пароль</label>
             <input type="password" name="password" id="password" class="form-control" minlength="4" maxlength="10" required>
-            <div class="invalid-feedback">Please enter your password.</div>
+            <div class="invalid-feedback">Введите пароль.</div>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Login</button>
+        <button type="submit" class="btn btn-primary w-100">Войти</button>
     </form>
 
     {% if error_message %}
@@ -43,6 +43,7 @@
             }, false)
             })
     })()
+
     </script>
 
 </div>
