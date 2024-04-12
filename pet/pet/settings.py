@@ -83,11 +83,11 @@ WSGI_APPLICATION = 'pet.wsgi.application'
 DATABASES = {
     'default': {
     'ENGINE': 'django.db.backends.mysql',
-    'NAME': 'world',
-    'USER': 'root',
-    'PASSWORD': 'PonchoAdmin!',
-    'HOST':'127.0.0.1',
-    'PORT':'3306',
+    'NAME': '',
+    'USER': '',
+    'PASSWORD': '',
+    'HOST':'',
+    'PORT':'',
     }
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
